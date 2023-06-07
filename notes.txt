@@ -5,7 +5,6 @@ package---->> Bundle js code prebuild inside it
     ==> check node version ------------> node -v
     ==> initialize node ---------------> npm init
     ==> to run node js file -----------> node filename.js
-    ==> to install external packages --> npm i 'any_external_package' (i means install)
-
+    
 nodemon --->> By using this we don't have to run code many time after making changes
     ==>npx nodemon
