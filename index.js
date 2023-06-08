@@ -1,4 +1,6 @@
+require("dotenv").config();
 const express = require("express");
+const mongoose = require("mongoose");
 var bodyParser = require("body-parser"); //to access the post data-->> to read the entire body and parse 
 //it and convert it into the json format
 
@@ -11,6 +13,9 @@ const booky = express();
 booky.use(bodyParser.urlencoded({ extended: true })); //req url can contain any type of data string object
 booky.use(bodyParser.json()); //to error free code
 
+
+mongoose.connect(process.env.MONGO_URL,
+).then(() => console.log("connection established!!"));
 /*
 Route         /
 Description   Get all the books
