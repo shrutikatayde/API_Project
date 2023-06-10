@@ -44,3 +44,12 @@ To get a list of publications based on books
 //1. Delete the book
 //2. Delete author from book
 //3. Delete author from book and related book from author
+
+
+//Schema - Blueprint of how data to be constructed
+//MongoDB is schemaless
+//mongoose has schema
+//mongoose - validation, relationship with other data
+//model -> document model of MongoDB
+
+//Schema-> Model-> use them
