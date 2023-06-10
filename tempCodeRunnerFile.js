@@ -1,4 +1,4 @@
-const updatedPublicationDatabase = await PublicationModel.findOneAndDelete(
+//const updatedPublicationDatabase = await PublicationModel.findOneAndDelete(
 //     {
 //         ID: req.body.id
 //     }

@@ -343,7 +343,7 @@ booky.put("/publication/update/book/:isbn", async (req, res) => {
             new: true
         }
     );
-    
+
     //update the books database
     const updatedBook = await BookModel.findOneAndUpdate(
         {
@@ -374,7 +374,7 @@ Route         /delete/book
 Description   delete the book
 Acess         PUBLIC
 Parameter     isbn
-Methods       PUT
+Methods       Delete
 */
 
 booky.delete("/book/delete/:isbn/", async (req, res) => {
@@ -396,21 +396,24 @@ Route         /delete/book
 Description   delete author from book
 Acess         PUBLIC
 Parameter     isbn
-Methods       PUT
+Methods       Delete
 */
-booky.delete("/book/author/delete/:isbn/:authorId", (req, res) => {
+booky.delete("/book/author/delete/:isbn/:authorId", async (req, res) => {
     //Update the book database
-    database.books.forEach((book) => {
-        if (book.ISBN === req.params.isbn) {
-            const newAuthorList = book.author.filter(
-                (eachAuthor) => eachAuthor !== parseInt(req.params.authorId)
-            );
-            book.author = newAuthorList;
-            return;
+    const updatedBook = await BookModel.findOneAndDelete(
+        {
+            ISBN: req.params.isbn
+        },
+        {
+            $pull: {
+                authors: parseInt(req.params.authorId)
+            }
+        },
+        {
+            new: true
         }
-    });
-    return res.json({
-        book: database.books,
+    ); return res.json({
+        book: updatedBook,
         message: "Author was deleted!!"
     });
 });
@@ -422,32 +425,51 @@ Route         /book/delete/author
 Description   Delete author from book and related book from author
 Acess         PUBLIC
 Parameter     isbn
-Methods       PUT
+Methods       Delete
 */
-booky.delete("/book/author/delete/:isbn/:authorId", (req, res) => {
+booky.delete("/book/author/delete/:isbn/:authorId", async (req, res) => {
     //Update the book database
-    database.books.forEach((book) => {
-        if (book.ISBN === req.params.isbn) {
-            const newAuthorList = book.author.filter(
-                (eachAuthor) => eachAuthor !== parseInt(req.params.authorId)
-            );
-            book.author = newAuthorList;
-            return;
+    const updatedBook = await BookModel.findOneAndDelete(
+        {
+            ISBN: req.params.isbn
+        },
+        {
+            $pull: {
+                authors: parseInt(req.params.authorId)
+            }
+        },
+        {
+            new: true
         }
-    });
+    );
     //Update the author database
-    database.author.forEach((eachAuthor) => {
-        if (eachAuthor.id === parseInt(req.params.authorId)) {
-            const newBookList = eachAuthor.books.filter(
-                (book) => book !== req.params.isbn
-            );
-            eachAuthor.books = newBookList;
-            return;
+    const updatedAuthor = await AuthorModel.findOneAndDelete(
+        {
+            authors: parseInt(req.params.authorId)
+
+        },
+        {
+            $pull: {
+                books: req.params.isbn
+
+            }
+        },
+        {
+            new: true
         }
-    });
+    );
+    // database.author.forEach((eachAuthor) => {
+    //     if (eachAuthor.id === parseInt(req.params.authorId)) {
+    //         const newBookList = eachAuthor.books.filter(
+    //             (book) => book !== req.params.isbn
+    //         );
+    //         eachAuthor.books = newBookList;
+    //         return;
+    //     }
+    // });
     return res.json({
-        book: database.books,
-        author: database.author,
+        book: updatedBook,
+        author: updatedAuthor,
         message: "Author was deleted!!"
     });
 });
